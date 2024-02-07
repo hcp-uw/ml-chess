@@ -5,11 +5,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import create_db_pool
 from models import Person
 from crud import get_all_people, get_person, create_person, update_person, delete_person
+import chess
 
 
 
 # Create a FastAPI instance
 app = FastAPI()
+
+board = chess.Board()
+
+@app.get("/")
+async def root():
+    print(board.fen())
+    return {"message": "Hello World"}
+
+@app.post("/makemove")
+async def make_move(move: str):
+    if (move in board.legal_moves()):
+        board.push_san(move)
+        return True
+    return False
+
+@app.get("/board")
+async def get_board():
+    return {"board": board.fen()}
 
 # Mount the static files directory
 app.mount("/static", StaticFiles(directory="static"), name="static")

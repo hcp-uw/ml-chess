@@ -8,6 +8,9 @@ import { PeopleList } from './components/PeopleList'
 // import functions from services folder
 import { create, getAll } from './services/people'
 
+import { getBoard } from './services/chess'
+
+
 
 
 // App component
@@ -18,14 +21,20 @@ function App () {
   const [age, setAge] = useState('')
   const [name, setName] = useState('')
   const [people, setPeople] = useState([])
+  const [board, setBoard] = useState('')
 
   // useEffect hook to make API call when component mounts
   // usage: useEffect(callback, [dependencies])
   // if you pass an empty array as the second argument, the callback will only
   // be called once, when the component mounts
+  // useEffect(() => {
+  //   getAll().then(response => {
+  //     setPeople(response.people.map(person => ({ person, active: true })))
+  //   })
+  // }, [])
   useEffect(() => {
-    getAll().then(response => {
-      setPeople(response.people.map(person => ({ person, active: true })))
+    getBoard().then(response => {
+      setBoard(response.board)
     })
   }, [])
 
@@ -73,6 +82,7 @@ function App () {
         setAge={setAge}
       />
       <PeopleList people={people} age={age} name={name} setPeople={setPeople} />
+      board = {board}
     </div>
   )
 }

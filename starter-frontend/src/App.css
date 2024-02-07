@@ -1,5 +1,35 @@
+:root {
+  --header-height: 3.5rem;
+
+  /*Font and typography*/
+  --title-font: "DM Sans", sans-serif;
+    --body-font: "DM Sans", sans-serif;
+    --biggest-font-size: 2rem;
+    --normal-font-size: .938rem;
+    --small-font-size: .813rem;
+
+  /* Font weight */
+  --font-medium: 500;
+  --font-semi-bold: 600;
+  --font-bold: 700;
+
+  /* z index */
+  --z-tooltip: 10;
+  --z-fixed: 100;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scroll-padding-top: 4rem;
+  scroll-behavior: smooth;
+  list-style: none;
+  text-decoration: none;
+}
+
 .App {
-  font-family: Arial, sans-serif;
+  /* font-family: Arial, sans-serif; */
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
@@ -12,4 +42,27 @@
   font-size: 24px;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.container {
+  max-width: 1120px;
+  margin-inline: 1.5rem;
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: seagreen;
+  z-index: var(--z-fixed);
+  color: white;
+}
+
+.nav {
+  position: relative;
+  height: var(--header-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

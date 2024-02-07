@@ -7,6 +7,10 @@ import PeopleForm from './components/PeopleForm'
 import { PeopleList } from './components/PeopleList'
 // import functions from services folder
 import { create, getAll } from './services/people'
+import { NavigationBar } from './components/Navigation'
+
+import { getBoard } from './services/chess'
+
 
 import { getBoard } from './services/chess'
 
@@ -73,6 +77,7 @@ function App () {
 
   return (
     <div className='App'>
+      <NavigationBar/>
       <h1 className='App-header'>Add People</h1>
       <PeopleForm
         handleSubmit={handleSubmit}

@@ -10,11 +10,7 @@ import { create, getAll } from './services/people'
 import { NavigationBar } from './components/Navigation'
 
 import { getBoard } from './services/chess'
-
-
-import { getBoard } from './services/chess'
-
-
+import { ChessBoard } from './components/ChessBoard'
 
 
 // App component
@@ -88,6 +84,7 @@ function App () {
       />
       <PeopleList people={people} age={age} name={name} setPeople={setPeople} />
       board = {board}
+      <ChessBoard/>
     </div>
   )
 }

@@ -10,6 +10,7 @@ export default function PeopleForm ({
   setName,      // props in the 
   setAge        // function signature
 }) {
+
   return (
     <form className='Form' onSubmit={handleSubmit}>
       <input
@@ -30,5 +31,7 @@ export default function PeopleForm ({
         Add Person
       </button>
     </form>
+
+    
   )
 }

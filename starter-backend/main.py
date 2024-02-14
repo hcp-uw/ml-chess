@@ -21,10 +21,12 @@ async def root():
 
 @app.post("/makemove")
 async def make_move(move: str):
-    if (move in board.legal_moves()):
-        board.push_san(move)
-        return True
-    return False
+    move = chess.Move.from_uci(move)
+    board.push(move)
+    
+@app.post("/reset")
+async def reset():
+    board.reset()
 
 @app.get("/board")
 async def get_board():

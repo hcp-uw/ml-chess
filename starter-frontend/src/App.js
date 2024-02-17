@@ -14,7 +14,7 @@ import { ChessBoard } from './components/ChessBoard'
 
 
 // App component
-function App () {
+function App() {
   // useState hooks to store state.
   // usage: const [state, setState] = useState(initialState)
   // note that every time you call setState, the component will re-render
@@ -73,18 +73,11 @@ function App () {
 
   return (
     <div className='App'>
-      <NavigationBar/>
-      <h1 className='App-header'>Add People</h1>
-      <PeopleForm
-        handleSubmit={handleSubmit}
-        name={name}
-        age={age}
-        setName={setName}
-        setAge={setAge}
-      />
-      <PeopleList people={people} age={age} name={name} setPeople={setPeople} />
-      board = {board}
-      <ChessBoard/>
+      <NavigationBar />
+      {board}
+      <br />
+      capital letters are white, / indicate each row, numbers  mean empty spaces
+      <ChessBoard />
     </div>
   )
 }

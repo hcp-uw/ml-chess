@@ -3,10 +3,10 @@
 
   /*Font and typography*/
   --title-font: "DM Sans", sans-serif;
-    --body-font: "DM Sans", sans-serif;
-    --biggest-font-size: 2rem;
-    --normal-font-size: .938rem;
-    --small-font-size: .813rem;
+  --body-font: "DM Sans", sans-serif;
+  --biggest-font-size: 2rem;
+  --normal-font-size: .938rem;
+  --small-font-size: .813rem;
 
   /* Font weight */
   --font-medium: 500;
@@ -30,8 +30,7 @@
 
 .App {
   /* font-family: Arial, sans-serif; */
-  max-width: 400px;
-  margin: 0 auto;
+  margin: 10%;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -67,21 +66,28 @@
   align-items: center;
 }
 
-body { 
-  text-align: center; 
-} 
-  
-.cell { 
-  height: 30px; 
-  width: 30px; 
-  border: 1.5px solid grey; 
-  border-style: inset; 
-} 
-  
-.blackcell { 
-  background-color: black; 
-} 
-  
-.whitecell { 
-  background-color: white; 
+body {
+  text-align: center;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cell {
+  height: 80px;
+  width: 80px;
+  border: 1.5px solid grey;
+  border-style: inset;
+  color: red;
+  font-size: 5rem;
+}
+
+.blackcell {
+  background-color: black;
+}
+
+.whitecell {
+  background-color: white;
 }

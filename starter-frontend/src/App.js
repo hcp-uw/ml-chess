@@ -2,15 +2,14 @@ import './App.css' // import css file
 import { useEffect, useState } from 'react' // import react hooks
 
 // import a default export from a file
-import PeopleForm from './components/PeopleForm'
+// import PeopleForm from './components/PeopleForm'
 // import a named export from a file
-import { PeopleList } from './components/PeopleList'
+import { ChessBoard } from './components/ChessBoard'
 // import functions from services folder
-import { create, getAll } from './services/people'
+// import { create, getAll } from './services/people'
 import { NavigationBar } from './components/Navigation'
 
 import { getBoard } from './services/chess'
-import { ChessBoard } from './components/ChessBoard'
 
 
 // App component
@@ -18,9 +17,9 @@ function App() {
   // useState hooks to store state.
   // usage: const [state, setState] = useState(initialState)
   // note that every time you call setState, the component will re-render
-  const [age, setAge] = useState('')
-  const [name, setName] = useState('')
-  const [people, setPeople] = useState([])
+  // const [age, setAge] = useState('')
+  // const [name, setName] = useState('')
+  // const [people, setPeople] = useState([])
   const [board, setBoard] = useState('')
 
   // useEffect hook to make API call when component mounts
@@ -44,14 +43,14 @@ function App() {
   // note that react handles the state locally so that you don't need
   // to refresh the page to see the changes. this is what makes react
   // so powerful
-  const handleSubmit = e => {
-    e.preventDefault() // prevent default form submission page refresh
-    setAge('') // clear the
-    setName('') // input fields
+  // const handleSubmit = e => {
+  //   e.preventDefault() // prevent default form submission page refresh
+  //   setAge('') // clear the
+  //   setName('') // input fields
 
-    // call the create function from services/people.js and update local state
-    create(name, age).then(response => setPeople([...people, response.person]))
-  }
+  //   // call the create function from services/people.js and update local state
+  //   create(name, age).then(response => setPeople([...people, response.person]))
+  // }
 
   // return the JSX that will be rendered. this is another powerful feature
   // of react. JSX is a syntax extension to javascript that allows us to

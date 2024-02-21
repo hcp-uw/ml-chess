@@ -1,9 +1,19 @@
 import React from "react";
+import { useEffect, useState } from 'react' // import react hooks
+
+import { getBoard } from '../services/chess'
 
 export function ChessBoard(props) {
+  const [boardfen, setBoard] = useState('')
+  useEffect(() => {
+    getBoard().then(response => {
+      setBoard(response.board)
+    })
+  }, [])
+
   let renderBoard = () => {
     let board = [];
-    let fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    let fen = {boardfen}.boardfen;
     let rowPointer = 0;
     let colPointer = 0;
     for (let i = 0; i < 8; i++) {

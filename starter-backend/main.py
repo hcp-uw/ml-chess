@@ -14,11 +14,6 @@ app = FastAPI()
 
 board = chess.Board()
 
-@app.get("/")
-async def root():
-    print(board.fen())
-    return {"message": "Hello World"}
-
 @app.post("/makemove")
 async def make_move(move: str):
     move = chess.Move.from_uci(move)

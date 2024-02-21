@@ -22,7 +22,8 @@ export async function getBoard () {
   // Here we make a GET request to the backend
   // The result is an object with a data property, which
   // contains the response from the backend
-  const { data } = await axios.get(`${baseURL}/board`)
+  const { data } = await axios.get(`${baseURL}/board`);
+  console.log(data)
   return data;
 }
 

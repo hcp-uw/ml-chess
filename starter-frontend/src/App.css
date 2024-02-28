@@ -1,6 +1,7 @@
 :root {
   --header-height: 3.5rem;
 
+
   /*Font and typography*/
   --title-font: "DM Sans", sans-serif;
   --body-font: "DM Sans", sans-serif;
@@ -8,10 +9,12 @@
   --normal-font-size: .938rem;
   --small-font-size: .813rem;
 
+
   /* Font weight */
   --font-medium: 500;
   --font-semi-bold: 600;
   --font-bold: 700;
+
 
   /* z index */
   --z-tooltip: 10;
@@ -29,42 +32,12 @@
 }
 
 .App {
-  /* font-family: Arial, sans-serif; */
   margin: 10%;
   margin-top: var(--header-height);
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color:#e6e6fa;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.App-header {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.container {
-  max-width: 1120px;
-  margin-inline: 1.5rem;
-}
-
-.header {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  background-color: seagreen;
-  z-index: var(--z-fixed);
-  color: white;
-}
-
-.nav {
-  position: relative;
-  height: var(--header-height);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 body {
@@ -74,21 +47,30 @@ body {
 .center {
   margin-left: auto;
   margin-right: auto;
+  align-content: center;
+  background-color: #e6e6fa;
 }
 
 .cell {
   height: 80px;
   width: 80px;
-  border: 1.5px solid grey;
+  border: 4px solid #dddddf;
   border-style: inset;
-  color: red;
-  font-size: 5rem;
+  color: darkgray;
+  font-size: 3.25rem;
+  text-align: center;
 }
 
 .blackcell {
-  background-color: black;
+  background-color: #FFD7E9;
 }
 
+
 .whitecell {
-  background-color: white;
+  background-color: #FFFBF3;
+}
+
+.logo {
+  width: 200px;
+  height: 60px;
 }

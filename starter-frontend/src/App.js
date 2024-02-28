@@ -1,5 +1,7 @@
 import './App.css' // import css file
 import { useEffect, useState } from 'react' // import react hooks
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 // import a default export from a file
 // import PeopleForm from './components/PeopleForm'
@@ -10,6 +12,7 @@ import { ChessBoard } from './components/ChessBoard'
 import { NavigationBar } from './components/Navigation'
 
 import { getBoard } from './services/chess'
+import { Footer } from './components/Footer';
 
 
 // App component
@@ -71,12 +74,12 @@ function App() {
   // of react
 
   return (
-    <div className='App'>
+    <div className='center'>
       <NavigationBar />
-      {board}
       <br />
       capital letters are white, / indicate each row, numbers  mean empty spaces
       <ChessBoard />
+      <Footer />
     </div>
   )
 }

@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { getBoard } from "../services/chess";
+import React, { useState } from "react";
+import { Chess } from 'chess.js'
 
 export function ChessBoard(props) {
   const [boardfen, setBoard] = useState("");
   const [pieceBeingDragged, setPieceBeingDragged] = useState(null);
-
-  useEffect(() => {
-    getBoard().then((response) => {
-      setBoard(response.board);
-    });
-  }, []);
+  const chess = new Chess();
 
   const pieceUnicodeMap = {
     r: "♜",
@@ -57,8 +52,9 @@ export function ChessBoard(props) {
   };
 
   const renderBoard = () => {
+    let i = 0;
     let board = [];
-    let fen = boardfen;
+    let fen = chess.fen();
     let rowPointer = 0;
     let colPointer = 0;
 
@@ -79,7 +75,7 @@ export function ChessBoard(props) {
           // Check if char in fen is a number
           if (fen[0] >= "1" && fen[0] <= "8") {
             // If it is then add it to our pointer
-            colPointer += parseInt(fen[0]) + 1;
+            colPointer += parseInt(fen[0]);
             // Update our fen
             fen = fen.substring(1);
           }

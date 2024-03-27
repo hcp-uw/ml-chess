@@ -101,6 +101,7 @@ export function ChessBoard(props) {
             onDrop={(e) => handleDrop(e, i, j)}
             draggable={piece !== ""}
             onDragOver={handleDragOver}
+            style={{ fontFamily: 'Arial, sans-serif' }}
           >
             {piece}
           </td>

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Chess } from 'chess.js'
 
 export function ChessBoard(props) {
   const [boardfen, setBoard] = useState("");
   const [pieceBeingDragged, setPieceBeingDragged] = useState(null);
-  const chess = new Chess();
+
+  const chess = props.chess;
+  
+  // use chess.turn() to get current turn, returns 'b' if black and 'w' if white
+  // undo button calls chess.undo()  
 
   const pieceUnicodeMap = {
     r: "♜",

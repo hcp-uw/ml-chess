@@ -76,8 +76,6 @@ function App() {
   return (
     <div className='center'>
       <NavigationBar />
-      <br />
-      capital letters are white, / indicate each row, numbers  mean empty spaces
       <ChessBoard />
       <Footer />
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export function ChessBoard(props) {
   const [boardfen, setBoard] = useState("");
-  const [pieceBeingDragged, setPieceBeingDragged] = useState(null);
+  const [pieceBeingDragged, setPieceBeingDragged] = useState(false);
 
   const chess = props.chess;
   
@@ -10,18 +10,18 @@ export function ChessBoard(props) {
   // undo button calls chess.undo()  
 
   const pieceUnicodeMap = {
-    r: "♜",
-    n: "♞",
-    b: "♝",
-    q: "♛",
-    k: "♚",
-    p: "♟",
-    R: "♖",
-    N: "♘",
-    B: "♗",
-    Q: "♕",
-    K: "♔",
-    P: "♙",
+    wr: "♜",
+    wn: "♞",
+    wb: "♝",
+    wq: "♛",
+    wk: "♚",
+    wp: "♟",
+    br: "♖",
+    bn: "♘",
+    bb: "♗",
+    bq: "♕",
+    bk: "♔",
+    bp: "♙",
   };
 
   const handleDragStart = (e, piece) => {
@@ -55,44 +55,18 @@ export function ChessBoard(props) {
   };
 
   const renderBoard = () => {
-    let i = 0;
+    let boardArray = chess.board();
     let board = [];
-    let fen = chess.fen();
-    let rowPointer = 0;
-    let colPointer = 0;
 
     for (let i = 0; i < 8; i++) {
       let row = [];
       for (let j = 0; j < 8; j++) {
-        // Make default piece holder
-        let piece = "";
-        // Check if char in fen is next row
-        if (fen[0] === "/") {
-          rowPointer += 1;
-          colPointer = 0;
-          // Update our fen
-          fen = fen.substring(1);
-        }
-        // Check if there's a piece on the square
-        if (rowPointer === i && colPointer === j) {
-          // Check if char in fen is a number
-          if (fen[0] >= "1" && fen[0] <= "8") {
-            // If it is then add it to our pointer
-            colPointer += parseInt(fen[0]);
-            // Update our fen
-            fen = fen.substring(1);
-          }
-          // If not an empty space or above checks, must be a piece
-          else if (!(fen[0] === " ")) {
-            piece = pieceUnicodeMap[fen[0]] || fen[0];
-            // Update our pointers
-            colPointer += 1;
-            // Update our fen
-            fen = fen.substring(1);
-          }
-        }
         let isEven = (i + j) % 2 === 0;
         let cellClass = isEven ? "cell whitecell" : "cell blackcell";
+        let piece = null;
+        if (boardArray[i][j] != null) {
+          piece = pieceUnicodeMap[boardArray[i][j].color + boardArray[i][j].type];
+        }
         row.push(
           <td
             key={`${i}-${j}`}
@@ -101,7 +75,11 @@ export function ChessBoard(props) {
             onDrop={(e) => handleDrop(e, i, j)}
             draggable={piece !== ""}
             onDragOver={handleDragOver}
+<<<<<<< Updated upstream
           >
+=======
+            style={{ fontFamily: 'Arial, sans-serif' }}>
+>>>>>>> Stashed changes
             {piece}
           </td>
         );

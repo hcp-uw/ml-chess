@@ -21,7 +21,18 @@ export function ChessBoard(props) {
     bb: "♗",
     bq: "♕",
     bk: "♔",
-    bp: "♙",
+    bp: "♙"
+  };
+
+  const numberToLetterMap = {
+    0: "A",
+    1: "B",
+    2: "C",
+    3: "D",
+    4: "E",
+    5: "F",
+    6: "G",
+    7: "H"
   };
 
   const handleDragStart = (e, piece) => {
@@ -58,28 +69,24 @@ export function ChessBoard(props) {
     let boardArray = chess.board();
     let board = [];
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 7; i >= 0; i--) {
       let row = [];
-      for (let j = 0; j < 8; j++) {
+      for (let j = 7; j >= 0; j--) {
         let isEven = (i + j) % 2 === 0;
         let cellClass = isEven ? "cell whitecell" : "cell blackcell";
         let piece = null;
         if (boardArray[i][j] != null) {
           piece = pieceUnicodeMap[boardArray[i][j].color + boardArray[i][j].type];
         }
-        row.push(
+        row.unshift(
           <td
-            key={`${i}-${j}`}
+            id={`${numberToLetterMap[j]}${i+1}`}
             className={cellClass}
             onDragStart={(e) => handleDragStart(e, piece)}
             onDrop={(e) => handleDrop(e, i, j)}
-            draggable={piece !== ""}
+            draggable={piece !== null}
             onDragOver={handleDragOver}
-<<<<<<< Updated upstream
-          >
-=======
             style={{ fontFamily: 'Arial, sans-serif' }}>
->>>>>>> Stashed changes
             {piece}
           </td>
         );

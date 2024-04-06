@@ -40,6 +40,10 @@ export function ChessBoard(props) {
   };
 
   const handleDrop = (e, targetRow, targetCol) => {
+    // Take the id of cell being dragged onto aka target, which should be in chess notation ex A1
+    // Translate move into chess notation like NxG5 or sm and call the move function on our chess.js library
+    // to determine if its a legal move, and if so then just re-render the board as our 2d array from the chess js
+    // library should be updated after calling the move function
     const newBoard = boardfen.split('/').map(row => row.split('')); // Convert boardfen to a 2D array
     const [sourceRow, sourceCol] = findPiece(newBoard, pieceBeingDragged);
   

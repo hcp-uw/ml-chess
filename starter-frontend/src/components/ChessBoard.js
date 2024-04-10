@@ -10,18 +10,18 @@ export function ChessBoard(props) {
   // undo button calls chess.undo()  
 
   const pieceUnicodeMap = {
-    br: "♜",
-    bn: "♞",
-    bb: "♝",
-    bq: "♛",
-    bk: "♚",
-    bp: "♟",
-    wr: "♖",
-    wn: "♘",
-    wb: "♗",
-    wq: "♕",
-    wk: "♔",
-    wp: "♙"
+    wr: "♜",
+    wn: "♞",
+    wb: "♝",
+    wq: "♛",
+    wk: "♚",
+    wp: "♟",
+    br: "♖",
+    bn: "♘",
+    bb: "♗",
+    bq: "♕",
+    bk: "♔",
+    bp: "♙"
   };
 
   const numberToLetterMap = {
@@ -72,7 +72,7 @@ export function ChessBoard(props) {
     let boardArray = chess.board();
     let board = [];
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 7; i >= 0; i--) {
       let row = [];
       for (let j = 0; j < 8; j++) {
         let isEven = (i + j) % 2 === 0;

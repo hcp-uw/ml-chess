@@ -43,50 +43,6 @@ async def shutdown_db_pool():
     await app.db_pool.close()
 
 
-# Define the API endpoint
-# The endpoint will be a GET request to the /people path.
-@app.get("/people")
-async def get_people():
-    # Aquire a database connection from the connection pool
-    #  and pass it to the function that will use it.
-    async with app.db_pool.acquire() as connection:
-        # Call the function that will use the database connection
-        people = await get_all_people(connection)
-        # Return the results
-        return {"people": people}
-
-
-# Define all the other API endpoints
-@app.get("/people/{id}")
-async def get_person_by_id(id: int):
-    async with app.db_pool.acquire() as connection:
-        person = await get_person(connection, id)
-        return {"person": person}
-
-@app.post("/people")
-async def create_new_person(person: Person):
-    async with app.db_pool.acquire() as connection:
-        new_person = await create_person(connection, person)
-        return {"person": new_person}
-
-@app.put("/people/{id}")
-async def update_existing_person(id: int, person: Person):
-    async with app.db_pool.acquire() as connection:
-        updated_person = await update_person(connection, id, person)
-        return {"person": updated_person}
-
-@app.delete("/people/{id}")
-async def delete_existing_person(id: int):
-    async with app.db_pool.acquire() as connection:
-        deleted_person = await delete_person(connection, id)
-        return {"person": deleted_person}
-
-@app.get("/testdb")
-async def test_db():
-    async with app.db_pool.acquire() as connection:
-        result = await connection.fetchval("SELECT 2 ^ 2;")
-        return {"result": result}
-
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,                             # CORS middleware class

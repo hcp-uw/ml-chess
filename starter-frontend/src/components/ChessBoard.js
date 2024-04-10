@@ -25,44 +25,43 @@ export function ChessBoard(props) {
   };
 
   const numberToLetterMap = {
-    0: "A",
-    1: "B",
-    2: "C",
-    3: "D",
-    4: "E",
-    5: "F",
-    6: "G",
-    7: "H"
+    0: "a",
+    1: "b",
+    2: "c",
+    3: "d",
+    4: "e",
+    5: "f",
+    6: "g",
+    7: "h"
   };
 
-  const handleDragStart = (e, piece) => {
-    setPieceBeingDragged(piece);
+  const handleDragStart = (e, id) => {
+    setPieceBeingDragged(id);
   };
 
-  const handleDrop = (e, targetRow, targetCol) => {
-    // Take the id of cell being dragged onto aka target, which should be in chess notation ex A1
-    // Translate move into chess notation like NxG5 or sm and call the move function on our chess.js library
-    // to determine if its a legal move, and if so then just re-render the board as our 2d array from the chess js
-    // library should be updated after calling the move function
-    const newBoard = boardfen.split('/').map(row => row.split('')); // Convert boardfen to a 2D array
-    const [sourceRow, sourceCol] = findPiece(newBoard, pieceBeingDragged);
+  const handleDrop = (e, targetId) => {
+    e.preventDefault(); // Prevent the default behavior
   
-    newBoard[targetRow][targetCol] = pieceBeingDragged;
-    newBoard[sourceRow][sourceCol] = null;
+    console.log("Dragging from: ", pieceBeingDragged); // Log the piece being dragged
+    console.log("Dropping to: ", targetId); // Log the target position
   
-    setBoard(newBoard.map(row => row.join('')).join('/')); // Convert back to fen notation
-    setPieceBeingDragged(null);
-  };
-
-  const findPiece = (board, piece) => {
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        if (board[row][col] === piece) {
-          return [row, col];
-        }
-      }
+    const move = null;
+    try {
+      const move = chess.move({ from: pieceBeingDragged, to: targetId });
     }
-    return [null, null];
+    catch {
+
+    }
+  
+    if (move === null) {
+      // Handle illegal move (e.g., by showing an error message)
+      console.log("Illegal move", move);
+    } else {
+      // Update the board state based on the new FEN from chess.js
+      setBoard(chess.board());
+    }
+  
+    setPieceBeingDragged(null); // Reset the dragged piece state
   };
 
   const handleDragOver = (e) => {
@@ -75,19 +74,20 @@ export function ChessBoard(props) {
 
     for (let i = 7; i >= 0; i--) {
       let row = [];
-      for (let j = 7; j >= 0; j--) {
+      for (let j = 0; j < 8; j++) {
         let isEven = (i + j) % 2 === 0;
         let cellClass = isEven ? "cell whitecell" : "cell blackcell";
         let piece = null;
         if (boardArray[i][j] != null) {
           piece = pieceUnicodeMap[boardArray[i][j].color + boardArray[i][j].type];
         }
-        row.unshift(
+        let square = numberToLetterMap[j] + '' + (8-i);
+        row.push(
           <td
-            id={`${numberToLetterMap[j]}${i+1}`}
+            id={square}
             className={cellClass}
-            onDragStart={(e) => handleDragStart(e, piece)}
-            onDrop={(e) => handleDrop(e, i, j)}
+            onDragStart={(e) => handleDragStart(e, square)}
+            onDrop={(e) => handleDrop(e, square)}
             draggable={piece !== null}
             onDragOver={handleDragOver}
             style={{ fontFamily: 'Arial, sans-serif' }}

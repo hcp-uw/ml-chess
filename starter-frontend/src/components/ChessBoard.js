@@ -24,19 +24,39 @@ export function ChessBoard(props) {
     P: "♙",
   };
 
-  const handleDragStart = (e, piece) => {
-    setPieceBeingDragged(piece);
+  const handleDragStart = (e, row, col) => {
+    setPieceBeingDragged({row, col});
   };
 
   const handleDrop = (e, targetRow, targetCol) => {
-    const newBoard = boardfen.split('/').map(row => row.split('')); // Convert boardfen to a 2D array
-    const [sourceRow, sourceCol] = findPiece(newBoard, pieceBeingDragged);
+    e.preventDefault(); // Prevent the default behavior
   
-    newBoard[targetRow][targetCol] = pieceBeingDragged;
-    newBoard[sourceRow][sourceCol] = null;
+    console.log("Dragging from:", pieceBeingDragged); // Log the piece being dragged
+    console.log("Dropping to:", targetRow, targetCol); // Log the target position
   
-    setBoard(newBoard.map(row => row.join('')).join('/')); // Convert back to fen notation
-    setPieceBeingDragged(null);
+
+    // Assuming pieceBeingDragged contains the source position and the piece type
+    const sourceSquare = convertToSquare(pieceBeingDragged.row, pieceBeingDragged.col);
+    const targetSquare = convertToSquare(targetRow, targetCol);
+  
+    const move = chess.move({ from: sourceSquare, to: targetSquare });
+  
+    if (move === null) {
+      // Handle illegal move (e.g., by showing an error message)
+      console.log("Illegal move");
+    } else {
+      // Update the board state based on the new FEN from chess.js
+      setBoard(chess.fen());
+    }
+  
+    setPieceBeingDragged(null); // Reset the dragged piece state
+  };
+  
+  // Helper function to convert row and column to chess square notation (e.g., "e4")
+  const convertToSquare = (row, col) => {
+    const file = String.fromCharCode('a'.charCodeAt(0) + col);
+    const rank = 8 - row; // Chess ranks go from 8 at the top to 1 at the bottom
+    return `${file}${rank}`;
   };
 
   const findPiece = (board, piece) => {
@@ -97,7 +117,7 @@ export function ChessBoard(props) {
           <td
             key={`${i}-${j}`}
             className={cellClass}
-            onDragStart={(e) => handleDragStart(e, piece)}
+            onDragStart={(e) => handleDragStart(e, i, j)}
             onDrop={(e) => handleDrop(e, i, j)}
             draggable={piece !== ""}
             onDragOver={handleDragOver}

@@ -92,6 +92,10 @@ body {
   transform: scale(1.1); 
 }
 
+.logo:hover {
+  transform: scale(1.1); 
+}
+
 .announcement {
   position: absolute;
   top: 50%;

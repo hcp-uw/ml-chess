@@ -44,15 +44,22 @@ export function ChessBoard(props) {
   
     console.log("Dragging from: ", pieceBeingDragged); // Log the piece being dragged
     console.log("Dropping to: ", targetId); // Log the target position
-  
+    
     const move = null;
+
     try {
       const move = chess.move({ from: pieceBeingDragged, to: targetId });
     }
     catch {
 
     }
-  
+
+    // If piece is pawn and is reaching end rank pop up ui for promotion
+    if (chess.get(pieceBeingDragged).type === 'p' && ((pieceBeingDragged[1] === '2' && targetId[1] === '1') 
+        || (pieceBeingDragged[1] === '7' && targetId[1] === '8'))) {
+      // pop ui up here, and recall the chess.move method but with the extra parameter of what to promote to
+    }
+
     if (move === null) {
       // Handle illegal move (e.g., by showing an error message)
       console.log("Illegal move", move);
@@ -62,7 +69,50 @@ export function ChessBoard(props) {
     }
   
     setPieceBeingDragged(null); // Reset the dragged piece state
+    
+    // check if game is over
+    handleGameOver();
+
+    // Check if we are playing against cpu or not
+    // If so, call http request and make that move
+    if (false) { // placeholder var for whether cpu game or not
+      // call http request to get move
+      let cpuMove;
+      // make move
+      chess.move(cpuMove);
+      // update board
+      setBoard(chess.board());
+      // check gamestate
+      handleGameOver();
+    }
   };
+
+  function handleGameOver() {
+    // Check if game over
+    if(chess.isCheckmate()) {
+      const message = document.createElement('div');
+      if (chess.turn() === 'b') {
+        message.textContent = 'White wins!'
+      }
+      else {
+        message.textContent = 'Black wins!'
+      }
+      message.className = 'announcement'
+      document.body.appendChild(message);
+    }
+    else if (chess.isDraw()) {
+      const message = document.createElement('div');
+      message.textContent = 'Draw!'
+      message.className = 'announcement'
+      document.body.appendChild(message);
+    }
+    else if (chess.isStalemate()) {
+      const message = document.createElement('div');
+      message.textContent = 'Stalemate!'
+      message.className = 'announcement'
+      document.body.appendChild(message);
+    }
+  }
 
   const handleDragOver = (e) => {
     e.preventDefault(); 

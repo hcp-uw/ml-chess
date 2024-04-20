@@ -74,3 +74,17 @@ body {
   width: 200px;
   height: 60px;
 }
+
+.announcement {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -10%);
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  background-color: #e6e6fa;
+  padding: 10px 20px;
+  border-radius: 15px;
+  border: black solid 2px;
+}

@@ -88,30 +88,63 @@ export function ChessBoard(props) {
   };
 
   function handleGameOver() {
+    let message;
     // Check if game over
     if(chess.isCheckmate()) {
-      const message = document.createElement('div');
       if (chess.turn() === 'b') {
-        message.textContent = 'White wins!'
+        message = createGameOverMessage('White Wins!');
       }
       else {
-        message.textContent = 'Black wins!'
+        message = createGameOverMessage('Black Wins!');
       }
-      message.className = 'announcement'
       document.body.appendChild(message);
     }
     else if (chess.isDraw()) {
-      const message = document.createElement('div');
-      message.textContent = 'Draw!'
-      message.className = 'announcement'
+      message = createGameOverMessage('Draw!');
       document.body.appendChild(message);
     }
     else if (chess.isStalemate()) {
-      const message = document.createElement('div');
-      message.textContent = 'Stalemate!'
-      message.className = 'announcement'
+      message = createGameOverMessage('Stalemate!');
       document.body.appendChild(message);
     }
+  }
+
+  function createGameOverMessage(text) {
+    // Create the message container
+    let message = document.createElement('div');
+    message.className = 'announcement';
+
+    // Create the message content
+    let messageText = document.createElement('p');
+    messageText.textContent = text;
+    message.appendChild(messageText);
+
+    // Create the close button
+    let closeButton = document.createElement('span');
+    closeButton.textContent = 'x';
+    closeButton.className = 'close-button';
+    closeButton.onclick = function() {
+        document.body.removeChild(message);
+    };
+    message.appendChild(closeButton);
+
+    // Create the "Play Again" button
+    let playAgainButton = document.createElement('button');
+    playAgainButton.className = 'play-again-button'
+    playAgainButton.textContent = 'Play Again';
+    playAgainButton.onclick = function() {
+        resetGame();
+        document.body.removeChild(message); // Close the message window
+    };
+    message.appendChild(playAgainButton);
+
+    return message;
+  }
+
+  // Resets our internal board from chess.js library and re-renders board
+  function resetGame() {
+    chess.reset();
+    setBoard(chess.board());
   }
 
   const handleDragOver = (e) => {
@@ -122,7 +155,7 @@ export function ChessBoard(props) {
     let boardArray = chess.board();
     let board = [];
 
-    for (let i = 7; i >= 0; i--) {
+    for (let i = 0; i < 8; i++) {
       let row = [];
       for (let j = 0; j < 8; j++) {
         let isEven = (i + j) % 2 === 0;

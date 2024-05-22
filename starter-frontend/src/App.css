@@ -69,6 +69,11 @@ body {
   box-shadow: var(--cell-shadow); 
 }
 
+.cell span {
+  cursor: move;
+  background-color: transparent;
+}
+
 .cell:hover {
   transform: translateY(-5px);
 }

@@ -58,6 +58,10 @@ body {
   background-color: #e6e6fa;
 }
 
+.left {
+  margin-left: 150px;
+}
+
 .cell {
   height: 80px;
   width: 80px;
@@ -134,4 +138,24 @@ body {
 
 .play-again-button:hover {
   background-color: #45a049;
+}
+
+.promoted-pawn {
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px #fff;
+  }
+  to {
+    box-shadow: 0 0 20px #ffd700;
+  }
+}
+
+.white-box {
+  margin-right: 200px;
+  background-color: white;
+  margin-left: 50px;
+  width: 600px
 }

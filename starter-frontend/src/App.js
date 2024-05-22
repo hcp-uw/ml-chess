@@ -13,6 +13,7 @@ import { NavigationBar } from './components/Navigation'
 
 import { getBoard } from './services/chess'
 import { Footer } from './components/Footer';
+import GameSettings from './components/GameSettings';
 
 
 // App component
@@ -24,7 +25,10 @@ function App() {
     <div className='center'>
       <NavigationBar />
       <br />
-      <ChessBoard chess={chess}/>
+      <div  className="d-flex">
+        <ChessBoard chess={chess}/>
+        <GameSettings/>
+      </div>
       <Footer />
     </div>
   )

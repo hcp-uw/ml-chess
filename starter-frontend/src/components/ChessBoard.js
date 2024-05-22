@@ -185,7 +185,7 @@ export function ChessBoard(props) {
   };
 
   return (
-    <table cellSpacing="0" className="center">
+    <table cellSpacing="0" className="left">
       <tbody>{renderBoard()}</tbody>
     </table>
   );

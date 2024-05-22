@@ -69,6 +69,11 @@ body {
   box-shadow: var(--cell-shadow); 
 }
 
+.cell span {
+  cursor: move;
+  background-color: transparent;
+}
+
 .cell:hover {
   transform: translateY(-5px);
 }
@@ -134,4 +139,48 @@ body {
 
 .play-again-button:hover {
   background-color: #45a049;
+}
+
+/* Promotion Selection */
+.promotion-selection {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #403b33; /* Match the chessboard border for consistency */
+  background-color: #FFF;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Adds depth with a shadow */
+  text-align: center; /* Center-align text for a neat look */
+  z-index: var(--z-tooltip); /* Use a z-index from your root variable */
+}
+
+/* Promotion Piece Buttons */
+.promotion-selection button {
+  font-size: var(--normal-font-size); /* Use the variable for font size */
+  color: #333; /* Dark text color for readability */
+  background-color: var(--chessboard-light); /* Light background for buttons */
+  border: 2px solid var(--chessboard-border); /* Borders matching the chessboard */
+  padding: 10px 15px; /* Comfortable padding around the text */
+  margin: 10px; /* Space between buttons */
+  cursor: pointer; /* Cursor to indicate clickability */
+  border-radius: var(--border-radius); /* Rounded corners */
+  box-shadow: var(--box-shadow); /* Consistent shadow with other elements */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover Effect for Buttons */
+.promotion-selection button:hover {
+  background-color: var(--chessboard-dark); /* Change color on hover for feedback */
+}
+
+/* CSS class for the drag icon used during piece dragging */
+.drag-icon {
+  font-size: 3.25rem;
+  font-family: 'Arial', sans-serif;
+  color: inherit; /* Inherit the color from the parent element */
+  background-color: transparent; /* Ensure no background */
+  position: absolute; /* Position absolutely to avoid affecting layout */
+  top: -9999px; /* Move off-screen */
 }

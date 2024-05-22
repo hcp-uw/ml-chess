@@ -38,15 +38,11 @@ export function ChessBoard(props) {
     if (isGameActive) {
       setPieceBeingDragged(id);
   
-      // Find the piece's text content
+      // Create a span for the drag image with the appropriate class
       let dragIcon = document.createElement('span');
       dragIcon.textContent = e.target.textContent; // Only the piece text
-      dragIcon.style.fontSize = '3.25rem'; // Match your cell's font size
-      dragIcon.style.fontFamily = 'Arial, sans-serif'; // Ensure consistent font
-      dragIcon.style.color = e.target.style.color; // Match the piece color
-      dragIcon.style.backgroundColor = 'transparent'; // Ensure no background
-      dragIcon.style.position = 'absolute'; // Position absolutely to avoid affecting layout
-      dragIcon.style.top = '-9999px'; // Move off-screen
+      dragIcon.className = 'drag-icon'; // Apply the CSS class for styling
+      dragIcon.style.color = e.target.style.color; // Set the color to match the dragged piece
   
       document.body.appendChild(dragIcon); // Temporarily add to the body
   
@@ -57,37 +53,82 @@ export function ChessBoard(props) {
       setTimeout(() => document.body.removeChild(dragIcon), 0);
     }
   };
+  
 
   const handleDrop = (e, targetId) => {
-    e.preventDefault(); 
+    e.preventDefault();
     if (!isGameActive) return; // Prevent move if the game is over
   
-    console.log("Dragging from: ", pieceBeingDragged); 
-    console.log("Dropping to: ", targetId); 
-    
-    const move = null;
-
+    console.log("Dragging from: ", pieceBeingDragged);
+    console.log("Dropping to: ", targetId);
+  
+    let move = null;
+  
     try {
-      const move = chess.move({ from: pieceBeingDragged, to: targetId });
+      move = chess.move({ from: pieceBeingDragged, to: targetId });
+    } catch (error) {
+      console.error("Error during move:", error);
     }
-    catch {
-      // Handle any exception during the move
+  
+    // get piece being moved
+    const piece = chess.get(pieceBeingDragged);
+    if (!piece) return finalizeMove(move);
+  
+    // check if pawn moving to right row
+    const startRow = pieceBeingDragged[1];
+    const targetRow = targetId[1];
+    const isPawn = piece.type === 'p';
+    const promotionRow = piece.color === 'w' ? '8' : '1';
+    const penultimateRow = piece.color === 'w' ? '7' : '2';
+  
+    // check if 2nd to last to last row
+    if (isPawn && startRow === penultimateRow && targetRow === promotionRow) {
+      // disable game while selection is occuring
+      setIsGameActive(false);
+      // call promo ui to be added
+      choosePromotionPiece(pieceBeingDragged, targetId);
+    } else {
+      finalizeMove(move);
     }
+  };
+  
 
-    if (chess.get(pieceBeingDragged).type === 'p' && ((pieceBeingDragged[1] === '2' && targetId[1] === '1') 
-        || (pieceBeingDragged[1] === '7' && targetId[1] === '8'))) {
-      // Handle pawn promotion
-    }
-
+  // Function to handle the finalization of a move
+  function finalizeMove(move) {
     if (move === null) {
       console.log("Illegal move", move);
     } else {
       setBoard(chess.board());
+      setPieceBeingDragged(null);
+      handleGameOver();
     }
+  }
   
-    setPieceBeingDragged(null); 
-    handleGameOver();
-  };
+  // Prompts user for promotion
+  function choosePromotionPiece(from, to) {
+    const promotionOptions = ['q', 'r', 'b', 'n'];
+    const promotionNames = ['Queen', 'Rook', 'Bishop', 'Knight'];
+
+    // Create div for selection
+    let selectionDiv = document.createElement('div');
+    selectionDiv.className = 'promotion-selection';
+
+    promotionOptions.forEach((option, index) => {
+      let button = document.createElement('button');
+      button.textContent = promotionNames[index];
+      button.onclick = () => {
+        document.body.removeChild(selectionDiv);
+        // Renable game
+        setIsGameActive(true);
+        const promotionMove = chess.move({ from, to, promotion: option });
+        finalizeMove(promotionMove);
+      };
+      selectionDiv.appendChild(button);
+    });
+
+    document.body.appendChild(selectionDiv);
+  }
+
 
   function handleGameOver() {
     let message;

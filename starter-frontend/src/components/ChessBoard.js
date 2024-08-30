@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export function ChessBoard(props) {
-  const [boardfen, setBoard] = useState("");
-  const [pieceBeingDragged, setPieceBeingDragged] = useState(false);
+export function ChessBoard({ chess }) {
+  const [boardFen, setBoardFen] = useState(chess.fen());
+  const [pieceBeingDragged, setPieceBeingDragged] = useState(null);
   const [isGameActive, setIsGameActive] = useState(true);
 
-  const chess = props.chess;
-  
   const pieceUnicodeMap = {
     br: "♜",
     bn: "♞",
@@ -33,83 +31,98 @@ export function ChessBoard(props) {
     7: "h"
   };
 
-  // Check if game is active or not to allow dragging
+  useEffect(() => {
+    setBoardFen(chess.fen());
+  }, [chess]);
+
+  const sendBoardStateToBackend = async () => {
+    const boardFEN = chess.fen();
+    const color = chess.turn() === 'w' ? 'white' : 'black';
+
+    try {
+      const response = await fetch('http://localhost:8000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ board: boardFEN, color }),
+      });
+
+      const result = await response.json();
+      console.log("Best move predicted by the model:", result);
+
+      if (result && result.move) {
+        chess.move(result.move);
+        setBoardFen(chess.fen());
+        handleGameOver();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   const handleDragStart = (e, id) => {
     if (isGameActive) {
       setPieceBeingDragged(id);
-  
-      // Create a span for the drag image with the appropriate class
+
       let dragIcon = document.createElement('span');
-      dragIcon.textContent = e.target.textContent; // Only the piece text
-      dragIcon.className = 'drag-icon'; // Apply the CSS class for styling
-      dragIcon.style.color = e.target.style.color; // Set the color to match the dragged piece
-  
-      document.body.appendChild(dragIcon); // Temporarily add to the body
-  
-      // Use this custom element as the drag image
+      dragIcon.textContent = e.target.textContent;
+      dragIcon.className = 'drag-icon';
+      dragIcon.style.color = e.target.style.color;
+
+      document.body.appendChild(dragIcon);
+
       e.dataTransfer.setDragImage(dragIcon, 0, 0);
-  
-      // Clean up after a slight delay to avoid visual glitches
+
       setTimeout(() => document.body.removeChild(dragIcon), 0);
     }
   };
-  
 
   const handleDrop = (e, targetId) => {
     e.preventDefault();
-    if (!isGameActive) return; // Prevent move if the game is over
-  
+    if (!isGameActive) return;
+
     console.log("Dragging from: ", pieceBeingDragged);
     console.log("Dropping to: ", targetId);
-  
+
     let move = null;
-  
+
     try {
-      move = chess.move({ from: pieceBeingDragged, to: targetId });
+      move = chess.move({ from: pieceBeingDragged, to: targetId, promotion: 'q' });
     } catch (error) {
       console.error("Error during move:", error);
     }
-  
-    // get piece being moved
-    const piece = chess.get(pieceBeingDragged);
-    if (!piece) return finalizeMove(move);
-  
-    // check if pawn moving to right row
-    const startRow = pieceBeingDragged[1];
-    const targetRow = targetId[1];
+
+    if (move === null) return;
+
+    const piece = chess.get(targetId);
     const isPawn = piece.type === 'p';
-    const promotionRow = piece.color === 'w' ? '8' : '1';
-    const penultimateRow = piece.color === 'w' ? '7' : '2';
-  
-    // check if 2nd to last to last row
-    if (isPawn && startRow === penultimateRow && targetRow === promotionRow) {
-      // disable game while selection is occuring
+    const isPromotion = (piece.color === 'w' && targetId[1] === '8') || (piece.color === 'b' && targetId[1] === '1');
+
+    if (isPawn && isPromotion) {
       setIsGameActive(false);
-      // call promo ui to be added
       choosePromotionPiece(pieceBeingDragged, targetId);
     } else {
       finalizeMove(move);
     }
   };
-  
 
-  // Function to handle the finalization of a move
   function finalizeMove(move) {
     if (move === null) {
-      console.log("Illegal move", move);
+      console.log("Illegal move");
     } else {
-      setBoard(chess.board());
+      setBoardFen(chess.fen());
       setPieceBeingDragged(null);
-      handleGameOver();
+      if (!handleGameOver()) {
+        sendBoardStateToBackend();
+      }
     }
   }
-  
-  // Prompts user for promotion
+
   function choosePromotionPiece(from, to) {
     const promotionOptions = ['q', 'r', 'b', 'n'];
     const promotionNames = ['Queen', 'Rook', 'Bishop', 'Knight'];
 
-    // Create div for selection
     let selectionDiv = document.createElement('div');
     selectionDiv.className = 'promotion-selection';
 
@@ -118,7 +131,6 @@ export function ChessBoard(props) {
       button.textContent = promotionNames[index];
       button.onclick = () => {
         document.body.removeChild(selectionDiv);
-        // Renable game
         setIsGameActive(true);
         const promotionMove = chess.move({ from, to, promotion: option });
         finalizeMove(promotionMove);
@@ -129,22 +141,22 @@ export function ChessBoard(props) {
     document.body.appendChild(selectionDiv);
   }
 
-
   function handleGameOver() {
     let message;
-    if (chess.isCheckmate() || chess.isDraw() || chess.isStalemate()) {
-      // Make pieces undraggable
+    if (chess.isGameOver()) {
       setIsGameActive(false);
-      
+
       if (chess.isCheckmate()) {
-        message = chess.turn() === 'b' ? createGameOverMessage('White Wins!') : createGameOverMessage('Black Wins!');
+        message = createGameOverMessage(chess.turn() === 'b' ? 'White Wins!' : 'Black Wins!');
       } else if (chess.isDraw()) {
         message = createGameOverMessage('Draw!');
       } else if (chess.isStalemate()) {
         message = createGameOverMessage('Stalemate!');
       }
       document.body.appendChild(message);
+      return true;
     }
+    return false;
   }
 
   function createGameOverMessage(text) {
@@ -177,46 +189,8 @@ export function ChessBoard(props) {
 
   function resetGame() {
     chess.reset();
-    setBoard(chess.board());
-    setIsGameActive(true); // Re-enable game activity or piece dragability
-  }
-
-  function createGameOverMessage(text) {
-    // Create the message container
-    let message = document.createElement('div');
-    message.className = 'announcement';
-
-    // Create the message content
-    let messageText = document.createElement('p');
-    messageText.textContent = text;
-    message.appendChild(messageText);
-
-    // Create the close button
-    let closeButton = document.createElement('span');
-    closeButton.textContent = 'x';
-    closeButton.className = 'close-button';
-    closeButton.onclick = function() {
-        document.body.removeChild(message);
-    };
-    message.appendChild(closeButton);
-
-    // Create the "Play Again" button
-    let playAgainButton = document.createElement('button');
-    playAgainButton.className = 'play-again-button'
-    playAgainButton.textContent = 'Play Again';
-    playAgainButton.onclick = function() {
-        resetGame();
-        document.body.removeChild(message); // Close the message window
-    };
-    message.appendChild(playAgainButton);
-
-    return message;
-  }
-
-  // Resets our internal board from chess.js library and re-renders board
-  function resetGame() {
-    chess.reset();
-    setBoard(chess.board());
+    setBoardFen(chess.fen());
+    setIsGameActive(true);
   }
 
   const handleDragOver = (e) => {
@@ -226,7 +200,7 @@ export function ChessBoard(props) {
   const renderBoard = () => {
     let boardArray = chess.board();
     let board = [];
-  
+
     for (let i = 0; i < 8; i++) {
       let row = [];
       for (let j = 0; j < 8; j++) {
@@ -245,11 +219,11 @@ export function ChessBoard(props) {
             </span>
           );
         }
-  
-        // The cell itself no longer handles drag events
+
         let square = numberToLetterMap[j] + '' + (8-i);
         row.push(
           <td
+            key={square}
             id={square}
             className={cellClass}
             onDrop={(e) => handleDrop(e, square)}
@@ -264,7 +238,6 @@ export function ChessBoard(props) {
     }
     return board;
   };
-  
 
   return (
     <table cellSpacing="0" className="center">

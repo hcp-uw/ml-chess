@@ -240,7 +240,7 @@ export function ChessBoard({ chess }) {
   };
 
   return (
-    <table cellSpacing="0" className="center">
+    <table cellSpacing="0" className="chessboard">
       <tbody>{renderBoard()}</tbody>
     </table>
   );

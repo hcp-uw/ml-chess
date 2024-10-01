@@ -26,19 +26,3 @@ export async function getBoard () {
   console.log(data)
   return data;
 }
-
-// export async function deletePerson (id) {
-//   // Here we make a DELETE request to the backend
-//   const { data } = await axios.delete(`${baseURL}/people/${id}`)
-//   return data;
-// }
-
-// export async function updatePerson (id, name, age) {
-//   // Here we make a PUT request to the backend
-//   const { data } = await axios.put(`${baseURL}/people/${id}`, {
-//     name,
-//     age
-//   })
-
-//   return data;
-// }

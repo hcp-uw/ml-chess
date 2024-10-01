@@ -5,6 +5,7 @@
   --chessboard-light: #FFF8E1; /* A softer cream for light squares */
   --chessboard-border: #403b33; /* Dark border for contrast and focus */
   --cell-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for cells */
+  --board-size: 500px /* Min board size */
 
   /*Font and typography*/
   --title-font: "Poppins", sans-serif; /* Modern, versatile font */
@@ -49,24 +50,55 @@
 
 body {
   text-align: center;
+	overscroll-behavior: contain;
 }
 
 .center {
-  margin-left: auto;
-  margin-right: auto;
-  align-content: center;
   background-color: #e6e6fa;
+  min-height: 100vh;
+  margin-bottom: 15px;
+}
+
+.chessboard {
+  margin: auto;
+  min-height: var(--board-size);
+  min-width: var(--board-size);
 }
 
 .cell {
-  height: 80px;
-  width: 80px;
-  border: 2px solid var(--chessboard-border); 
-  border-radius: var(--border-radius); 
+  width: 6.5vw;
+  height: 6.5vw;
+  border: 2px solid var(--chessboard-border);
+  border-radius: var(--border-radius);
   color: var(--text-color);
-  font-size: 3.25rem;
-  text-align: center; 
-  box-shadow: var(--cell-shadow); 
+  font-size: 4vw; /* Use rem for scalability */
+  text-align: center;
+  box-shadow: var(--cell-shadow);
+}
+
+.footer{
+  position: absolute;
+  margin-left: 15px;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Adjust font size for smaller screens */
+@media (max-width: 800px) {
+  .cell {
+    height: 54px; 
+    width: 54px;
+    font-size: 32px; 
+  }
+}
+
+/* Adjust font size for larger screens */
+@media (min-width: 1200px) {
+  .cell {
+    height: 80px; 
+    width: 80px;
+    font-size: 48px; 
+  }
 }
 
 .cell span {

@@ -1,5 +1,4 @@
 import './App.css' // import css file
-import { useEffect, useState } from 'react' // import react hooks
 import 'bootstrap/dist/css/bootstrap.css';
 
 import { Chess } from 'chess.js'
@@ -11,7 +10,6 @@ import { ChessBoard } from './components/ChessBoard'
 // import { create, getAll } from './services/people'
 import { NavigationBar } from './components/Navigation'
 
-import { getBoard } from './services/chess'
 import { Footer } from './components/Footer';
 
 
@@ -21,12 +19,14 @@ function App() {
   const chess = new Chess();
 
   return (
+    <>
     <div className='center'>
       <NavigationBar />
       <br />
       <ChessBoard chess={chess}/>
-      <Footer />
     </div>
+    <Footer />
+    </>
   )
 }
 
